@@ -1,23 +1,14 @@
-# ReaPack Repository Template
+# Kokkinos-Scripts
 
-A template for GitHub-hosted ReaPack repositories with automated
-[reapack-index](https://github.com/cfillion/reapack-index)
-running from GitHub Actions.
+A collection of ReaScripts for REAPER by Cookie (Chris Kokkinos).
 
-Replace the name of the repository in [index.xml](/index.xml) when using this template.
-This will be the name shown in ReaPack.
+## Scripts
 
-```xml
-<index version="1" name="Name of your repository here">
-```
+- **External Window Docker** — Embed external application windows (browsers, media players, etc.) directly into REAPER's docker system.
+- **Markers to Take Markers** — Copy project markers to take markers on selected media items, preserving names and colors.
 
-Replace the contents of this file ([README.md](/README.md)).
-This will be the text shown when using ReaPack's "About this repository" feature.
+## Installation
 
-reapack-index looks for package files in subfolders.
-The folder tree represents the package categories shown in ReaPack.
-
-Each package file is expected to begin with a metadata header.
-See [Packaging Documentation](https://github.com/cfillion/reapack-index/wiki/Packaging-Documentation) on reapack-index's wiki.
-
-The URL to import in ReaPack is [https://github.com/`<your username>`/`<repository name>`/raw/master/index.xml](https://github.com/cfillion/reapack-repository-template/raw/master/index.xml).
+1. In REAPER, go to Extensions > ReaPack > Import repositories
+2. Paste: `https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/master/index.xml`
+3. Browse and install scripts via Extensions > ReaPack > Browse packages
