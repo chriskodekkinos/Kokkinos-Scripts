@@ -19,7 +19,7 @@
 --
 --   ## Notes
 --   - Requires SWS Extension
---   - Shares the "needs export" color with CK_MarkItemNeedsExport
+--   - Shares the "needs export" color with Kokkinos_MarkItemNeedsExport
 --   - Automatically mutes video track sends before render
 --   - Matches the parent item by .rpp source filename (safe with renamed takes)
 -- @link GitHub https://github.com/chriskodekkinos/Kokkinos-Scripts
@@ -37,10 +37,10 @@ if not current_proj_name or current_proj_name == "" then
 end
 
 -----------------------------------------------------------
--- Export color (shared with CK_MarkItemNeedsExport)
+-- Export color (shared with Kokkinos_MarkItemNeedsExport)
 -----------------------------------------------------------
 
-local EXT_SECTION = "CK_ExportStatus"
+local EXT_SECTION = "Kokkinos_ExportStatus"
 local EXT_KEY = "needs_export_color"
 local DEFAULT_COLOR = "#FF6600"
 

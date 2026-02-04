@@ -35,14 +35,14 @@
 --   4. Use "Open & Embed" to launch and dock browser content
 --
 --   ## Keyboard Shortcut
---   Install the companion script "CK_ExternalWindowDocker_ToggleMenu"
+--   Install the companion script "Kokkinos_ExternalWindowDocker_ToggleMenu"
 --   and assign it a keyboard shortcut via Actions > Show action list.
 -- @link GitHub https://github.com/chriskodekkinos/Kokkinos-Scripts
 -- @provides
 --   [main] .
---   [main] CK_ExternalWindowDocker_ToggleMenu.lua
+--   [main] Kokkinos_ExternalWindowDocker_ToggleMenu.lua
 
--- CK_ExternalWindowDocker v1.7
+-- Kokkinos_ExternalWindowDocker v1.7
 -- Embed browser windows into REAPER
 -- Author: Cookie
 -- Requires: ReaImGui, js_ReaScriptAPI
@@ -62,9 +62,9 @@ local GWL_STYLE, GWL_EXSTYLE = -16, -20
 local WS_CHILD, WS_VISIBLE, WS_OVERLAPPEDWINDOW, WS_CLIPSIBLINGS = 0x40000000, 0x10000000, 0x00CF0000, 0x04000000
 
 local SCRIPT_PATH = reaper.GetResourcePath() .. "/Scripts/"
-local HISTORY_FILE = SCRIPT_PATH .. "CK_ExternalWindowDocker_history.txt"
-local SETTINGS_FILE = SCRIPT_PATH .. "CK_ExternalWindowDocker_settings.txt"
-local FAVORITES_FILE = SCRIPT_PATH .. "CK_ExternalWindowDocker_favorites.txt"
+local HISTORY_FILE = SCRIPT_PATH .. "Kokkinos_ExternalWindowDocker_history.txt"
+local SETTINGS_FILE = SCRIPT_PATH .. "Kokkinos_ExternalWindowDocker_settings.txt"
+local FAVORITES_FILE = SCRIPT_PATH .. "Kokkinos_ExternalWindowDocker_favorites.txt"
 
 local MENU_WIDTH, MENU_MIN_HEIGHT, MENU_MAX_HEIGHT = 320, 300, 900
 local TITLE_MAX_LENGTH, HISTORY_DISPLAY_LIMIT = 35, 5
@@ -807,7 +807,7 @@ local function draw_settings_tab()
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Text(), 0xFFD700FF)
     reaper.ImGui_Text(ctx, "Keyboard Shortcut:")
     reaper.ImGui_PopStyleColor(ctx)
-    reaper.ImGui_TextColored(ctx, 0x888888FF, "Add CK_ExternalWindowDocker_ToggleMenu")
+    reaper.ImGui_TextColored(ctx, 0x888888FF, "Add Kokkinos_ExternalWindowDocker_ToggleMenu")
     reaper.ImGui_TextColored(ctx, 0x888888FF, "to REAPER's Actions list, then assign")
     reaper.ImGui_TextColored(ctx, 0x888888FF, "a shortcut via Actions > Show action list.")
 
@@ -826,7 +826,7 @@ end
 -- UI: Help Tab
 local function draw_help_tab()
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Text(), 0x4A90D9FF)
-    reaper.ImGui_Text(ctx, "CK_ExternalWindowDocker v1.7")
+    reaper.ImGui_Text(ctx, "Kokkinos_ExternalWindowDocker v1.7")
     reaper.ImGui_PopStyleColor(ctx)
     reaper.ImGui_TextColored(ctx, 0x888888FF, "Embed browser windows into REAPER")
     reaper.ImGui_Spacing(ctx)
@@ -944,9 +944,9 @@ local function do_frame()
         if not settings.hide_tips_popup then show_tips_banner = true end
     end
     -- Poll for external toggle signal (companion script shortcut)
-    local toggle = reaper.GetExtState("CK_ExternalWindowDocker", "toggle_menu")
+    local toggle = reaper.GetExtState("Kokkinos_ExternalWindowDocker", "toggle_menu")
     if toggle == "1" then
-        reaper.DeleteExtState("CK_ExternalWindowDocker", "toggle_menu", false)
+        reaper.DeleteExtState("Kokkinos_ExternalWindowDocker", "toggle_menu", false)
         show_menu_window = not show_menu_window
         if show_menu_window then menu_just_opened, current_tab = true, 0 end
     end
@@ -1004,7 +1004,7 @@ local function main_loop()
     else
         if settings_dirty then save_settings() end
         if is_embedded then release_window() end
-        reaper.DeleteExtState("CK_ExternalWindowDocker", "toggle_menu", false)
+        reaper.DeleteExtState("Kokkinos_ExternalWindowDocker", "toggle_menu", false)
         ctx = nil
     end
 end
@@ -1016,7 +1016,7 @@ if ctx then
     load_history()
     load_favorites()
     detect_browsers()
-    reaper.DeleteExtState("CK_ExternalWindowDocker", "toggle_menu", false)
+    reaper.DeleteExtState("Kokkinos_ExternalWindowDocker", "toggle_menu", false)
     if settings.auto_reembed and settings.last_embed_url then
         launch_app_mode(settings.last_embed_url, true)
     end
