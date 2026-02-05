@@ -1,14 +1,8 @@
 -- @description External Window Docker
 -- @author Cookie (Chris Kokkinos)
--- @version 1.7.0
+-- @version 1.7.1
 -- @changelog
---   - Added keyboard shortcut support via companion toggle script
---   - Added re-embed last URL on startup option
---   - Performance: async window refresh (non-blocking)
---   - Performance: deferred settings persistence
---   - Performance: cached browser path detection
---   - Fixed dock transition crash handling
---   - Updated Help tab and Settings documentation
+--   - Fixed ImGui BeginChild/EndChild stack mismatch crash
 -- @about
 --   # External Window Docker
 --
@@ -42,7 +36,7 @@
 --   [main] .
 --   [main] Kokkinos_ExternalWindowDocker_ToggleMenu.lua
 
--- Kokkinos_ExternalWindowDocker v1.7
+-- Kokkinos_ExternalWindowDocker v1.7.1
 -- Embed browser windows into REAPER
 -- Author: Cookie
 -- Requires: ReaImGui, js_ReaScriptAPI
@@ -624,19 +618,18 @@ local function draw_windows_tab()
             reaper.ImGui_Text(ctx, "Available Windows:")
         end
 
-        if reaper.ImGui_BeginChild(ctx, "winlist", -1, 140, reaper.ImGui_ChildFlags_Borders()) then
-            if #available_windows > 0 then
-                for i, win in ipairs(available_windows) do
-                    if reaper.ImGui_Selectable(ctx, win.icon .. win.display .. "##w" .. i) then
-                        try_embed_window(win.hwnd, win.title)
-                    end
+        reaper.ImGui_BeginChild(ctx, "winlist", -1, 140, reaper.ImGui_ChildFlags_Borders())
+        if #available_windows > 0 then
+            for i, win in ipairs(available_windows) do
+                if reaper.ImGui_Selectable(ctx, win.icon .. win.display .. "##w" .. i) then
+                    try_embed_window(win.hwnd, win.title)
                 end
-            else
-                reaper.ImGui_TextColored(ctx, 0x888888FF, "(No windows found)")
-                reaper.ImGui_TextColored(ctx, 0x888888FF, "Click Refresh or open an app")
             end
-            reaper.ImGui_EndChild(ctx)
+        else
+            reaper.ImGui_TextColored(ctx, 0x888888FF, "(No windows found)")
+            reaper.ImGui_TextColored(ctx, 0x888888FF, "Click Refresh or open an app")
         end
+        reaper.ImGui_EndChild(ctx)
 
         if reaper.ImGui_Button(ctx, "Refresh Window List", -1, 0) then refresh_windows() end
         reaper.ImGui_Spacing(ctx)
@@ -826,7 +819,7 @@ end
 -- UI: Help Tab
 local function draw_help_tab()
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Text(), 0x4A90D9FF)
-    reaper.ImGui_Text(ctx, "Kokkinos_ExternalWindowDocker v1.7")
+    reaper.ImGui_Text(ctx, "Kokkinos_ExternalWindowDocker v1.7.1")
     reaper.ImGui_PopStyleColor(ctx)
     reaper.ImGui_TextColored(ctx, 0x888888FF, "Embed browser windows into REAPER")
     reaper.ImGui_Spacing(ctx)
