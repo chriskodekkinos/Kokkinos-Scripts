@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Kokkinos-Scripts" commit="509a17f532a3616c9476215c93e64cae08ec806e">
+<index version="1" name="Kokkinos-Scripts" commit="7a1c69c7cd84ede9007aeea6ba3e4ba6e8dd4225">
   <category name="Docking">
     <reapack name="Kokkinos_ExternalWindowDocker.lua" type="script" desc="External Window Docker">
       <metadata>
@@ -41,6 +41,11 @@
 - Updated Help tab and Settings documentation]]></changelog>
         <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/509a17f532a3616c9476215c93e64cae08ec806e/Docking/Kokkinos_ExternalWindowDocker.lua</source>
         <source main="main" file="Kokkinos_ExternalWindowDocker_ToggleMenu.lua">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/509a17f532a3616c9476215c93e64cae08ec806e/Docking/Kokkinos_ExternalWindowDocker_ToggleMenu.lua</source>
+      </version>
+      <version name="1.7.1" author="Cookie (Chris Kokkinos)" time="2026-02-05T21:48:03Z">
+        <changelog><![CDATA[- Fixed ImGui BeginChild/EndChild stack mismatch crash]]></changelog>
+        <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/7a1c69c7cd84ede9007aeea6ba3e4ba6e8dd4225/Docking/Kokkinos_ExternalWindowDocker.lua</source>
+        <source main="main" file="Kokkinos_ExternalWindowDocker_ToggleMenu.lua">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/7a1c69c7cd84ede9007aeea6ba3e4ba6e8dd4225/Docking/Kokkinos_ExternalWindowDocker_ToggleMenu.lua</source>
       </version>
     </reapack>
   </category>
