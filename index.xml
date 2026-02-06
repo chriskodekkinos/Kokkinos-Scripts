@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Kokkinos-Scripts" commit="7a1c69c7cd84ede9007aeea6ba3e4ba6e8dd4225">
+<index version="1" name="Kokkinos-Scripts" commit="415f36b8da6106e0429571986ea02d89fcd60074">
   <category name="Docking">
     <reapack name="Kokkinos_ExternalWindowDocker.lua" type="script" desc="External Window Docker">
       <metadata>
@@ -101,6 +101,33 @@
       <version name="1.1.0" author="Cookie (Chris Kokkinos)" time="2026-02-04T19:51:52Z">
         <changelog><![CDATA[- Support multiple selected items]]></changelog>
         <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/509a17f532a3616c9476215c93e64cae08ec806e/Markers/Kokkinos_MarkersToTakeMarkers.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Naming">
+    <reapack name="Kokkinos_FindReplaceTakeName.lua" type="script" desc="Find and Replace Take Names">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Find and Replace Take Names\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Batch find-and-replace text in the take names of selected media items.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Usage\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Select one or more media items\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Run this script\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab Enter the text to find and the replacement text\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 4.\tx360\tab Click Replace to apply\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 5.\tx360\tab Select new items and repeat as needed\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Requirements\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab ReaImGui\sa180\par}
+}
+]]></description>
+        <link rel="website" href="https://github.com/chriskodekkinos/Kokkinos-Scripts">GitHub</link>
+      </metadata>
+      <version name="1.0.0" author="Cookie (Chris Kokkinos)" time="2026-02-06T03:12:27Z">
+        <changelog><![CDATA[- Initial release]]></changelog>
+        <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/415f36b8da6106e0429571986ea02d89fcd60074/Naming/Kokkinos_FindReplaceTakeName.lua</source>
       </version>
     </reapack>
   </category>
