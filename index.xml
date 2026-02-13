@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Kokkinos-Scripts" commit="00475c6f6c750e8271308bef5e115c5eac7260ed">
+<index version="1" name="Kokkinos-Scripts" commit="bd8ce4f2098b82b0fd06737ffd710a9465a3d59d">
   <category name="Docking">
     <reapack name="Kokkinos_ExternalWindowDocker.lua" type="script" desc="External Window Docker">
       <metadata>
@@ -72,6 +72,23 @@
       <version name="1.0.0" author="Cookie (Chris Kokkinos)" time="2026-02-04T19:51:52Z">
         <changelog><![CDATA[- Initial release]]></changelog>
         <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/509a17f532a3616c9476215c93e64cae08ec806e/Item%20Coloring/Kokkinos_ClearExportStatus.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Items">
+    <reapack name="Kokkinos_Convert selected items to empty items.lua" type="script" desc="Convert selected items to empty items">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Removes all takes from selected items, converting them to empty items. Preserves item position, length, track, and color.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Special thanks to Rodrigo Robinet for the request.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Kokkinos" time="2026-02-12T23:53:18Z">
+        <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/bd8ce4f2098b82b0fd06737ffd710a9465a3d59d/Items/Kokkinos_Convert%20selected%20items%20to%20empty%20items.lua</source>
       </version>
     </reapack>
   </category>
