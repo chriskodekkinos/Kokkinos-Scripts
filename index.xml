@@ -169,6 +169,7 @@ v1.0.0
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Kokkinos-Scripts\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 A collection of ReaScripts for REAPER by Cookie (Chris Kokkinos).\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Scripts\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b External Window Docker} \u8212- Embed external application windows (browsers, media players, etc.) directly into REAPER's docker system.\par}
 {\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Markers to Take Markers} \u8212- Copy project markers to take markers on selected media items, preserving names and colors.\sa180\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Installation\par}
 {\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab In REAPER, go to Extensions > ReaPack > Import repositories\par}
