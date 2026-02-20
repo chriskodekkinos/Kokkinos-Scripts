@@ -1,8 +1,11 @@
 -- @description Batch Rename and Enumerate
 -- @author Cookie (Chris Kokkinos)
--- @version 1.0.0
+-- @version 1.1.0
 -- @changelog
---   - Initial release
+--   v1.1.0
+--     - Strip .rpp suffix from auto-detected base name (subproject renders)
+--   v1.0.0
+--     - Initial release
 -- @about
 --   # Batch Rename and Enumerate
 --
@@ -127,6 +130,7 @@ local function check_selection()
     local take = reaper.GetActiveTake(first)
     if take then
         local name = reaper.GetTakeName(take)
+        name = name:gsub("%.[Rr][Pp][Pp]$", "")
         base_name, separator, start_num, padding = parse_name(name)
     else
         base_name = ""
