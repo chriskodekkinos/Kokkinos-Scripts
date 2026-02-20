@@ -1,5 +1,5 @@
 -- @description Convert selected items to empty items
--- @author Kokkinos
+-- @author Cookie (Chris Kokkinos)
 -- @version 1.0
 -- @about
 --   Removes all takes from selected items, converting them to empty items.
