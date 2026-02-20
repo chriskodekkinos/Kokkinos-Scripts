@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Kokkinos-Scripts" commit="bd8ce4f2098b82b0fd06737ffd710a9465a3d59d">
+<index version="1" name="Kokkinos-Scripts" commit="1c41dd0027ab08d54fafd330bce4f0e3356a3756">
   <category name="Docking">
     <reapack name="Kokkinos_ExternalWindowDocker.lua" type="script" desc="External Window Docker">
       <metadata>
@@ -145,6 +145,13 @@
       <version name="1.0.0" author="Cookie (Chris Kokkinos)" time="2026-02-08T19:26:57Z">
         <changelog><![CDATA[- Initial release]]></changelog>
         <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/00475c6f6c750e8271308bef5e115c5eac7260ed/Naming/Kokkinos_BatchRenameEnumerate.lua</source>
+      </version>
+      <version name="1.1.0" author="Cookie (Chris Kokkinos)" time="2026-02-20T00:41:05Z">
+        <changelog><![CDATA[v1.1.0
+  - Strip .rpp suffix from auto-detected base name (subproject renders)
+v1.0.0
+  - Initial release]]></changelog>
+        <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/1c41dd0027ab08d54fafd330bce4f0e3356a3756/Naming/Kokkinos_BatchRenameEnumerate.lua</source>
       </version>
     </reapack>
     <reapack name="Kokkinos_FindReplaceTakeName.lua" type="script" desc="Find and Replace Take Names">
