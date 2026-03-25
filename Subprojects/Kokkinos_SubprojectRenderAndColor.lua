@@ -1,8 +1,13 @@
 -- @description Subproject Render and Color
 -- @author Cookie (Chris Kokkinos)
--- @version 1.0.0
+-- @version 1.2.0
 -- @changelog
---   - Initial release
+--   v1.2.0
+--     - Fix false matches on similarly-named subprojects (exact basename matching)
+--   v1.1.0
+--     - Find unsaved parent projects by checking items in memory (no .rpp file needed)
+--   v1.0.0
+--     - Initial release
 -- @about
 --   # Subproject Render and Color
 --
@@ -90,6 +95,14 @@ local function restore_video_sends(track_states)
 end
 
 -----------------------------------------------------------
+-- Helpers
+-----------------------------------------------------------
+
+local function basename(path)
+    return path:match("[/\\]([^/\\]+)$") or path
+end
+
+-----------------------------------------------------------
 -- Parent project navigation
 -----------------------------------------------------------
 
@@ -98,18 +111,47 @@ local function find_parent_project(subproj_name)
     local current_proj = reaper.EnumProjects(-1)
     local proj_idx = 0
 
+    -- Match the subproject name as a whole word in file contents
+    -- (surrounded by non-alphanumeric/underscore chars or start/end of string)
+    local escaped = subproj_lower:gsub("([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1")
+    local boundary_pattern = "[^%w_]" .. escaped .. "[^%w_]"
+
     while true do
         local proj, proj_fn = reaper.EnumProjects(proj_idx)
         if not proj then break end
 
-        if proj ~= current_proj and proj_fn ~= "" then
-            local file = io.open(proj_fn, "r")
-            if file then
-                local contents = file:read("*all")
-                file:close()
-                if contents:lower():find(subproj_lower, 1, true) then
-                    return proj
+        if proj ~= current_proj then
+            if proj_fn ~= "" then
+                -- Saved project: search file contents on disk
+                local file = io.open(proj_fn, "r")
+                if file then
+                    local contents = file:read("*all")
+                    file:close()
+                    local lower_contents = contents:lower()
+                    -- Pad with spaces so boundary pattern works at start/end
+                    if (" " .. lower_contents .. " "):find(boundary_pattern) then
+                        return proj
+                    end
                 end
+            else
+                -- Unsaved project: check items in memory by source filename
+                local found = false
+                for i = 0, reaper.CountMediaItems(proj) - 1 do
+                    local item = reaper.GetMediaItem(proj, i)
+                    for j = 0, reaper.CountTakes(item) - 1 do
+                        local take = reaper.GetTake(item, j)
+                        local source = reaper.GetMediaItemTake_Source(take)
+                        local filename = reaper.GetMediaSourceFileName(source)
+                        local base = basename(filename):lower()
+                        if base == subproj_lower
+                        or base == subproj_lower .. ".rpp" then
+                            found = true
+                            break
+                        end
+                    end
+                    if found then break end
+                end
+                if found then return proj end
             end
         end
         proj_idx = proj_idx + 1
@@ -134,8 +176,10 @@ local function find_subproject_items(proj, subproj_name)
             local take = reaper.GetTake(item, j)
             local source = reaper.GetMediaItemTake_Source(take)
             local filename = reaper.GetMediaSourceFileName(source)
+            local base = basename(filename):lower()
 
-            if filename:lower():find(subproj_lower, 1, true) then
+            if base == subproj_lower
+            or base == subproj_lower .. ".rpp" then
                 items[#items + 1] = item
                 break
             end
