@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Kokkinos-Scripts" commit="1c41dd0027ab08d54fafd330bce4f0e3356a3756">
+<index version="1" name="Kokkinos-Scripts" commit="7773b3c9925ddad197fb696afd802090d47cb024">
   <category name="Item Coloring">
     <reapack name="Kokkinos_ClearExportStatus.lua" type="script" desc="Clear Export Status">
       <metadata>
@@ -158,6 +158,15 @@ v1.0.0
       <version name="1.0.0" author="Cookie (Chris Kokkinos)" time="2026-02-04T19:51:52Z">
         <changelog><![CDATA[- Initial release]]></changelog>
         <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/509a17f532a3616c9476215c93e64cae08ec806e/Subprojects/Kokkinos_SubprojectRenderAndColor.lua</source>
+      </version>
+      <version name="1.2.0" author="Cookie (Chris Kokkinos)" time="2026-03-25T20:58:33Z">
+        <changelog><![CDATA[v1.2.0
+  - Fix false matches on similarly-named subprojects (exact basename matching)
+v1.1.0
+  - Find unsaved parent projects by checking items in memory (no .rpp file needed)
+v1.0.0
+  - Initial release]]></changelog>
+        <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/7773b3c9925ddad197fb696afd802090d47cb024/Subprojects/Kokkinos_SubprojectRenderAndColor.lua</source>
       </version>
     </reapack>
   </category>
