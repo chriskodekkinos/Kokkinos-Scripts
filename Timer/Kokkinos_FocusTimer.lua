@@ -127,9 +127,13 @@ load_tasks()
 ------------------------------------------------------------------------
 -- Task record helpers
 ------------------------------------------------------------------------
+local function eq_i(a, b)
+    return a:lower() == b:lower()
+end
+
 local function find_task(project, category, name)
     for _, t in ipairs(tasks) do
-        if t.project == project and t.category == category and t.name == name then
+        if eq_i(t.project, project) and eq_i(t.category, category) and eq_i(t.name, name) then
             return t
         end
     end
@@ -158,7 +162,7 @@ local function merge_or_rename(target, new_project, new_category, new_name)
     -- check for an existing different record with the new identity
     local existing
     for _, t in ipairs(tasks) do
-        if t ~= target and t.project == new_project and t.category == new_category and t.name == new_name then
+        if t ~= target and eq_i(t.project, new_project) and eq_i(t.category, new_category) and eq_i(t.name, new_name) then
             existing = t
             break
         end
@@ -246,6 +250,7 @@ local state = {
     last_mouse_y      = -1,
     last_proj_count   = reaper.GetProjectStateChangeCount(0),
     auto_paused       = false,
+    pause_reason      = nil,  -- "manual", "no_task", "idle"
     paused_prompted   = false,
     paused_at         = 0,
     resume_popup_done = false,
@@ -286,16 +291,18 @@ local function start_timer()
     state.session_start = os.time()
     state.last_activity_ts = os.time()
     state.auto_paused = false
+    state.pause_reason = nil
     state.paused_prompted = false
     state.paused_at = 0
     state.resume_popup_done = false
 end
 
-local function pause_timer()
+local function pause_timer(reason)
     if not state.running then return end
     state.session_banked = state.session_banked + (os.time() - state.session_start)
     state.running = false
-    state.paused_prompted = true   -- suppress immediate prompt for manual pause
+    state.pause_reason = reason or "manual"
+    state.paused_prompted = true
     state.paused_at = os.time()
     state.resume_popup_done = false
 end
@@ -305,6 +312,7 @@ local function reset_session()
     state.session_banked = 0
     state.session_start = 0
     state.auto_paused = false
+    state.pause_reason = nil
     state.paused_prompted = false
     state.paused_at = 0
     state.resume_popup_done = false
@@ -320,9 +328,12 @@ local function check_idle()
         state.last_mouse_x, state.last_mouse_y = mx, my
         state.last_proj_count = pc
         -- Unlock the resume prompt if paused, grace elapsed, and not already shown
+        -- "no_task" (logging) never triggers the resume prompt
         if not state.running and state.session_banked > 0
-           and state.paused_prompted and not state.resume_popup_done then
-            local grace = state.auto_paused and 0 or 5
+           and state.paused_prompted and not state.resume_popup_done
+           and state.pause_reason ~= "no_task" then
+            local grace_by_reason = { idle = 0, manual = 5 }
+            local grace = grace_by_reason[state.pause_reason or "manual"] or 5
             if (os.time() - (state.paused_at or 0)) >= grace then
                 state.paused_prompted = false
             end
@@ -334,7 +345,8 @@ local function check_idle()
             state.session_banked = state.session_banked + (os.time() - state.session_start)
             state.running = false
             state.auto_paused = true
-            state.paused_prompted = true   -- wait for activity to unlock it (grace = 0)
+            state.pause_reason = "idle"
+            state.paused_prompted = true
             state.paused_at = os.time()
         end
     end
@@ -391,7 +403,7 @@ local function draw_settings()
         save_settings()
     end
     reaper.ImGui_Text(ctx, "(activity = mouse move or any REAPER action)")
-    local chk3, new_skip = reaper.ImGui_Checkbox(ctx, "Skip 'no task' warning on start", state.skip_no_task_warn)
+    local chk3, new_skip = reaper.ImGui_Checkbox(ctx, "Skip 'no task' warning on log", state.skip_no_task_warn)
     if chk3 then state.skip_no_task_warn = new_skip; save_settings() end
 end
 
@@ -492,9 +504,20 @@ local function draw_big_timer()
     local planned = planned_seconds()
     local remaining = planned - elapsed
     local display, sub_display
-    local is_paused = (not state.running) and state.session_banked > 0
+    local is_stopped = (not state.running) and state.session_banked > 0
 
-    if is_paused then
+    if is_stopped and state.pause_reason == "no_task" then
+        local has_task = trim(state.task_label) ~= ""
+        bg = 0x2C5A5AFF
+        fg = 0xB2DFDBFF
+        if has_task then
+            display = "READY TO LOG"
+            sub_display = format_hms(elapsed) .. " elapsed"
+        else
+            display = "ADD TASK"
+            sub_display = "fill in a task name to log"
+        end
+    elseif is_stopped then
         bg = 0x2C4A7CFF
         fg = 0xBBDEFBFF
         display = "PAUSED"
@@ -539,12 +562,13 @@ local function draw_big_timer()
     reaper.ImGui_SetCursorScreenPos(ctx, cx, cy + box_h + 4)
 end
 
-local function try_start_timer()
+local function try_log_session()
     local has_task = trim(state.task_label) ~= ""
     if has_task or state.skip_no_task_warn then
-        start_timer()
+        log_session()
     else
-        state.pending_no_task_start = true
+        -- Pause so user can fill in the task name without losing time
+        if state.running then pause_timer("no_task") end
         reaper.ImGui_OpenPopup(ctx, "no_task_warning")
     end
 end
@@ -552,8 +576,17 @@ end
 local function draw_no_task_popup()
     local center_x, center_y = reaper.ImGui_Viewport_GetCenter(reaper.ImGui_GetWindowViewport(ctx))
     reaper.ImGui_SetNextWindowPos(ctx, center_x, center_y, reaper.ImGui_Cond_Appearing(), 0.5, 0.5)
-    if reaper.ImGui_BeginPopupModal(ctx, "no_task_warning", nil, reaper.ImGui_WindowFlags_AlwaysAutoResize()) then
-        reaper.ImGui_Text(ctx, "No task is set. Start the timer anyway?")
+    local flags = reaper.ImGui_WindowFlags_AlwaysAutoResize() + reaper.ImGui_WindowFlags_NoTitleBar()
+    if reaper.ImGui_BeginPopupModal(ctx, "no_task_warning", nil, flags) then
+        local msg = "No task is set. Add a task name before logging."
+        reaper.ImGui_PushFont(ctx, med_font, 16)
+        local tw = reaper.ImGui_CalcTextSize(ctx, msg)
+        local popup_avail = reaper.ImGui_GetContentRegionAvail(ctx)
+        if popup_avail > tw then
+            reaper.ImGui_SetCursorPosX(ctx, (popup_avail - tw) * 0.5 + reaper.ImGui_GetCursorPosX(ctx))
+        end
+        reaper.ImGui_Text(ctx, msg)
+        reaper.ImGui_PopFont(ctx)
         reaper.ImGui_Spacing(ctx)
         local chk, new_skip = reaper.ImGui_Checkbox(ctx, "Don't ask this again", state.skip_no_task_warn)
         if chk then
@@ -561,13 +594,12 @@ local function draw_no_task_popup()
             save_settings()
         end
         reaper.ImGui_Spacing(ctx)
-        if reaper.ImGui_Button(ctx, "Start", 80, 0) then
-            start_timer()
-            reaper.ImGui_CloseCurrentPopup(ctx)
+        local btn_total = 80
+        local btn_avail = reaper.ImGui_GetContentRegionAvail(ctx)
+        if btn_avail > btn_total then
+            reaper.ImGui_SetCursorPosX(ctx, (btn_avail - btn_total) * 0.5 + reaper.ImGui_GetCursorPosX(ctx))
         end
-        reaper.ImGui_SameLine(ctx)
-        if reaper.ImGui_Button(ctx, "Cancel", 80, 0) then
-            state.pending_no_task_start = false
+        if reaper.ImGui_Button(ctx, "OK", 80, 0) then
             reaper.ImGui_CloseCurrentPopup(ctx)
         end
         reaper.ImGui_EndPopup(ctx)
@@ -629,15 +661,27 @@ local function draw_controls()
 
     if reaper.ImGui_Button(ctx, btn_label, btn_w, 30) then
         if state.running then
-            pause_timer()
+            pause_timer("manual")
         else
-            try_start_timer()
+            start_timer()
         end
     end
     reaper.ImGui_SameLine(ctx)
     if reaper.ImGui_Button(ctx, "Reset", btn_w, 30) then reset_session() end
     reaper.ImGui_SameLine(ctx)
-    if reaper.ImGui_Button(ctx, "Log session", log_w, 30) then log_session() end
+    -- Highlight Log button in "ready to log" state (no_task pause + task filled in)
+    local highlight_log = state.pause_reason == "no_task"
+        and not state.running and state.session_banked > 0
+        and trim(state.task_label) ~= ""
+    local color_count = 0
+    if highlight_log then
+        reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Button(), 0x2E7D32FF)
+        reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ButtonHovered(), 0x388E3CFF)
+        reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ButtonActive(), 0x1B5E20FF)
+        color_count = 3
+    end
+    if reaper.ImGui_Button(ctx, "Log session", log_w, 30) then try_log_session() end
+    if color_count > 0 then reaper.ImGui_PopStyleColor(ctx, color_count) end
 
     -- Prompt to resume: fires exactly once per pause cycle
     if not state.running and state.session_banked > 0
