@@ -1,7 +1,8 @@
 -- @description Focus Timer
 -- @author Cookie (Chris Kokkinos)
--- @version 1.1.0
+-- @version 1.2.0
 -- @changelog
+--   v1.2.0 - UX polish: pause/resume states, logging flow, idle prompt, responsive layout, case-insensitive matching
 --   v1.1.0 - Structured Project / Category / Task hierarchy, rename/merge, decimal idle
 --   v1.0.0 - Initial release
 -- @about
