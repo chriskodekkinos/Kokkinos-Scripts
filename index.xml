@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Kokkinos-Scripts" commit="7773b3c9925ddad197fb696afd802090d47cb024">
+<index version="1" name="Kokkinos-Scripts" commit="7241e6dde907e5915b2cec20c3d10c8e56c88c77">
   <category name="Item Coloring">
     <reapack name="Kokkinos_ClearExportStatus.lua" type="script" desc="Clear Export Status">
       <metadata>
@@ -167,6 +167,25 @@ v1.1.0
 v1.0.0
   - Initial release]]></changelog>
         <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/7773b3c9925ddad197fb696afd802090d47cb024/Subprojects/Kokkinos_SubprojectRenderAndColor.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Timer">
+    <reapack name="Kokkinos_FocusTimer.lua" type="script" desc="Focus Timer">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Dockable focus timer with task-based session logging. Set a target duration, watch the color shift as you progress (green -> yellow -> orange -> red overtime), and log time against Project / Category / Task records that accumulate across sessions. Requires: ReaImGui\par}
+}
+]]></description>
+        <link rel="website" href="https://github.com/chriskodekkinos/Kokkinos-Scripts">GitHub</link>
+      </metadata>
+      <version name="1.1.0" author="Cookie (Chris Kokkinos)" time="2026-04-16T21:00:49Z">
+        <changelog><![CDATA[v1.1.0 - Structured Project / Category / Task hierarchy, rename/merge, decimal idle
+v1.0.0 - Initial release]]></changelog>
+        <source main="main">https://github.com/chriskodekkinos/Kokkinos-Scripts/raw/4398cdd310c5e000d5ad8e6f6d569dba65d25a33/Timer/Kokkinos_FocusTimer.lua</source>
       </version>
     </reapack>
   </category>
